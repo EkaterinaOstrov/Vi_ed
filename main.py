@@ -1,4 +1,4 @@
-from PIL import Image, ImageTk
+from PIL import ImageTk, Image, ImageFilter
 from tkinter import Frame, Canvas, Button, Tk, filedialog, Scrollbar
 
 class Example(Frame):
@@ -17,6 +17,7 @@ class Example(Frame):
 
     def open(self):
         self.filename = filedialog.askopenfilename()# создание области для загрузки изображений
+
 #диалоговое окно для выбора изображения
         self.image = Image.open(self.filename)
         self.photo = ImageTk.PhotoImage(self.image)
@@ -29,11 +30,23 @@ class Example(Frame):
         self.scr2 = Scrollbar(root, command=self.display.xview, orient='horizontal')
         self.scr2.place(x=200,y=550)
 
-#создание кнопки открытия
+#добавляем фильтр для применения размытия к изображению    
+    def blur(self):
+        image = Image.open(self.filename)
 
+        image = image.filter(ImageFilter.BLUR)
+
+        self.photo = ImageTk.PhotoImage(image)
+        self.display.itemconfigure(self.display_img, image = self.photo, anchor="nw")
+ 
     def create_menu(self):
-        self.btn_open = Button(text="Открыть",  height=3, width=12, command=self.open)
+#кнопка для открытия изображения
+        self.btn_open = Button(text="Открыть",  height=3, width=20, command=self.open)
         self.btn_open.place(x=25, y =60)
+
+#кнопка для применения фильтра "Размытие"
+        self.btn_blur = Button(text="Размытие изображения", height=3, width=20, command=self.blur)
+        self.btn_blur.place(x=25, y= 120)
 
 if __name__ == '__main__':
     root = Tk()
