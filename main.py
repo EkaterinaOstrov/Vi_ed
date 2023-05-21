@@ -1,34 +1,43 @@
 from PIL import Image, ImageTk
-from tkinter import Tk, Label, BOTH, Frame, Button, messagebox
- 
+from tkinter import Frame, Canvas, Button, Tk, filedialog, Scrollbar
+
 class Example(Frame):
     def __init__(self, parent):
-        Frame.__init__(self, parent, background="white")   
+        Frame.__init__(self, parent)   
         self.parent = parent
         self.create_menu()
-    
-    def close(self):
-        if messagebox.askyesno('Выход', 'Действительно хотите завершить работу с приложением?'):
-            self.parent.destroy()
-#  в перспективе надо переделать данную часть
-        else:
-            messagebox.askyesno('Вы отказались от выхода из программы', 'Продолжаем!')
-    
-    def create_menu(self):
-        self.pack(fill=BOTH, expand=1)
-        self.btn_exit = Button(text="Выход", height = 2, width = 10, command = self.close)
-        self.btn_exit.place(x = 5, y = 25)
 
-        nordshine = Image.open("NordSh.jpg")
-        nordshineing = ImageTk.PhotoImage(nordshine)
-        Label1 = Label(self, image=nordshineing)
-        Label1.image = nordshineing
-        Label1.place(x=50, y = 100)
+        self.image = None
+        self.photo = None
+
+#создание области куда будет осуществляться загрузка изображений"
+        self.display = Canvas(self.parent, width=800, height=800, bg="gray")
+        self.display_img = self.display.create_image(0, 0)
+        self.display.pack()
+
+    def open(self):
+        self.filename = filedialog.askopenfilename()# создание области для загрузки изображений
+#диалоговое окно для выбора изображения
+        self.image = Image.open(self.filename)
+        self.photo = ImageTk.PhotoImage(self.image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor = "nw")
+
+#установка скролбаров вертикаль и горизонталь по координатамб для возможности полного просмотра изобращения
+        self.scr1 = Scrollbar(root, command=self.display.yview, orient='vertical')
+        self.scr1.place(x=150, y=30)
+
+        self.scr2 = Scrollbar(root, command=self.display.xview, orient='horizontal')
+        self.scr2.place(x=200,y=550)
+
+#создание кнопки открытия
+
+    def create_menu(self):
+        self.btn_open = Button(text="Открыть",  height=3, width=12, command=self.open)
+        self.btn_open.place(x=25, y =60)
 
 if __name__ == '__main__':
     root = Tk()
-    root.title("Мой графический редактор")
+    root.title("VISUAL EDITOR")
     root.geometry("1250x1050+500+400")
-    root.attributes("-alpha", 0.9)
     app = Example(root)
     root.mainloop()
