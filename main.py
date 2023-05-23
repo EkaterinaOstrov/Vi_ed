@@ -38,7 +38,15 @@ class Example(Frame):
 
         self.photo = ImageTk.PhotoImage(image)
         self.display.itemconfigure(self.display_img, image = self.photo, anchor="nw")
- 
+
+    def miniatura(self):#использование фильтра для создания миниатюр  
+        image = Image.open(self.filename)
+
+        image = image.resize((150, 150), Image.ANTIALIAS)
+
+        self.photo = ImageTk.PhotoImage(image)
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+
     def create_menu(self):
 #кнопка для открытия изображения
         self.btn_open = Button(text="Открыть",  height=3, width=20, command=self.open)
@@ -47,6 +55,9 @@ class Example(Frame):
 #кнопка для применения фильтра "Размытие"
         self.btn_blur = Button(text="Размытие изображения", height=3, width=20, command=self.blur)
         self.btn_blur.place(x=25, y= 120)
+#кнопка для применения фильтра "Создание миниатюры"
+        self.btn_miniatura = Button(text="Создать миниатюру", height=3, width=20, command=self.miniatura)
+        self.btn_miniatura.place(x=25, y=180)
 
 if __name__ == '__main__':
     root = Tk()
