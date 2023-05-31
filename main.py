@@ -1,5 +1,5 @@
 from PIL import ImageTk, Image, ImageFilter
-from tkinter import Frame, Canvas, Button, Tk, filedialog, Scrollbar, Label, messagebox
+from tkinter import Frame, Canvas, Button, Tk, filedialog, Scrollbar, Label, messagebox, Menu
 
 class Example(Frame):
     def __init__(self, parent):
@@ -17,20 +17,60 @@ class Example(Frame):
 
     def open(self):
         self.filename = filedialog.askopenfilename()# создание области для загрузки изображений
-
 #диалоговое окно для выбора изображения
         self.image = Image.open(self.filename)
         self.photo = ImageTk.PhotoImage(self.image)
         self.display.itemconfigure(self.display_img, image=self.photo, anchor = "nw")
-
 #установка скролбаров вертикаль и горизонталь по координатамб для возможности полного просмотра изобращения
         self.scr1 = Scrollbar(root, command=self.display.yview, orient='vertical')
         self.scr1.place(x=150, y=30)
-
         self.scr2 = Scrollbar(root, command=self.display.xview, orient='horizontal')
         self.scr2.place(x=200,y=550)
 
-#добавляем фильтр для применения размытия к изображению    
+    def save(self):
+        pass
+    
+    def clean(self):
+        pass
+    
+    def close(self):
+        pass
+    
+    def brightness_clik(self):
+        pass
+    
+    def contrast_click(self):
+        pass
+    
+    def rgb_balance(self):
+        pass
+    
+    def choice_big(self):
+        pass
+    
+    def choice_rotation(self):
+        pass
+    
+    def negative_click(self):
+        pass
+    
+    def rnd_noise_click(self):
+        pass
+    
+    def gray_click(self):
+        pass
+    
+    def serpia_click(self):
+        pass
+    
+    def black_white_click(self):
+        pass
+    
+    def rnd_red_click(self):
+        pass
+   
+'''    
+#добавляем фильтр для применения размытия к изображению 
     def blur(self):
         image = Image.open(self.filename)
 
@@ -67,25 +107,42 @@ class Example(Frame):
         image = image.filter(ImageFilter.EMBOSS)
         
         self.photo = ImageTk.PhotoImage(image)
-        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")
+        self.display.itemconfigure(self.display_img, image=self.photo, anchor="nw")'''
     
-    def save(self):
-        pass
-    
-    def clean(self):
-        pass
-    
-    def close(self):
-        pass
-
     def create_menu(self):
+        menu = Menu(self.parent)
+        self.file_menu = Menu(menu)
+        self.filter_menu = Menu(menu)
+        self.parametr_menu = Menu(menu)
+
+#формирование подменю
+        menu.add_cascade(label="Файл",menu=self.file_menu)
+        menu.add_cascade(label="Фильтры", menu=self.filters_menu)
+        menu.add_cascade(label="Параметры", menu=self.parametr_menu)
+
+#наполнение подменю Файл
+        self.file_menu.add_command(label="Открыть", command=self.open)
+        self.file_menu.add_command(label="Сохранить", command=self.save, state="disabled")
+        self.file_menu.add_command(label="Очистить", command=self.clean, state="disabled")
+        self.file_menu.add_separator()
+        self.file_menu.add_command(label="Выход", command=self.close)
+
+#наполнение подменю Фильтр
+        self.filters_menu.add_command(label="Негатив", command=self.negativ_click, state="disabled")
+
+#наполнение подменю Параметр
+        self.parametr_menu.add_command(label="Яркость", command=self.brightness_clik, state="disabled")
+        self.parametr_menu.add_command(label="Контрастность", command=self.contrast_click, state="disabled")
+
         label_fail = Label(root, text="Параметры файла")
-        label_fail.place(x=25, y=860)
+        label_fail.place(x=22, y=30)
+
 #кнопка для открытия изображения
         self.btn_open = Button(text="Открыть",  height=3, width=20, command=self.open)
         self.btn_open.place(x=25, y =60)
 
-#кнопка для применения фильтра "Размытие"
+'''
+ #кнопка для применения фильтра "Размытие"
         self.btn_blur = Button(text="Размытие изображения", height=3, width=20, command=self.blur)
         self.btn_blur.place(x=25, y= 120)
 #кнопка для применения фильтра "Создание миниатюры"
@@ -98,17 +155,20 @@ class Example(Frame):
 #кнопка для применения фильтра "Тиснение"
         self.btn_emboss = Button(text="Тиснение", height=3, width=20, command=self.emboss)
         self.btn_emboss.place(x=25, y=300)
+'''
 
 #кнопка для применения фильтра "Сохранить"
         self.btn_save = Button(text="Сохранить", height=3, width=20, command=self.save, state="disabled")
-        self.btn_save.place(x=25, y=900)
+        self.btn_save.place(x=25, y=60)
 #кнопка для применения фильтра "Очистить"
         self.btn_clean = Button(text="Очистить", height=3, width=20, command=self.clean, state="disabled")
-        self.btn_clean.place(x=250, y=900)
+        self.btn_clean.place(x=25, y=105)
 
 #кнопка для применения фильтра "Выход"
         self.btn_close = Button(text="Выход", height=3, width=20, command=self.close)
-        self.btn_close.place(x=475, y=900)
+        self.btn_close.place(x=25, y=195)
+
+        self.parent.config(menu=menu)
 
 if __name__ == '__main__':
     root = Tk()
